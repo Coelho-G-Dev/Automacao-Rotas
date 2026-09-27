@@ -1,0 +1,55 @@
+# ==========================================
+# Pastas de Dados Locais / Operação Bruta
+# ==========================================
+Address/
+Aniversario/
+Armazzens/
+Armazens/
+CIclo/
+Ciclo/
+Davinopolis/
+ERotas/
+EvoluSep/
+Grade/
+Inventarios/
+Lojas/
+Paletizacao/
+Secao/
+Backup/
+Backups/
+
+# Planilha diária pesada de entrada e saídas locais
+Acomp_EvoluSep.xlsx
+Prototipo_Rotas_Frios*.xlsx
+
+# ==========================================
+# Arquivos Temporários de Bloqueio do Excel
+# ==========================================
+~$*.xlsx
+~$*.xls
+*.tmp
+
+# ==========================================
+# Python (Bytecode e Caches)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+
+# ==========================================
+# Dependências Node.js
+# ==========================================
+node_modules/
+npm-debug.log*
+
+# ==========================================
+# Sistema Operacional e IDEs
+# ==========================================
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store
