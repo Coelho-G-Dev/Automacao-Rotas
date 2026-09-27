@@ -34,7 +34,7 @@ LIMITE_LOJAS_CARRETA_CAPITAL = 1
 LIMITE_LOJAS_CARRETA_INTERIOR = 4
 PESO_MINIMO_ROTA = 5000
 TOLERANCIA_PISO_CAPITAL = 1000.0
-TOLERANCIA_MAX_SOBREPESO = 100.0  # Tolerância máxima de sobrepeso para fechar rota (até 100 kg permitido; mais de 100 kg causa quebra)
+TOLERANCIA_MAX_SOBREPESO = 100.0
 
 PARAMETROS_FROTA = [
     {"tipo": "3/4",     "peso_minimo": 5500,  "piso_operacional": 5000, "capacidade": 6000,  "regioes": ["CAPITAL"]},
@@ -673,7 +673,7 @@ def otimizar_veiculos_rota_pura(rota_nome: str, regiao: str, pool_lojas: list, b
             cap_nominal = next((vec["capacidade"] for vec in PARAMETROS_FROTA if vec["tipo"] == v), 0.0)
             if p > cap_nominal:
                 excesso_kg = p - cap_nominal
-                tipo_aloc += f" | Tolerância de Teto (+{excesso_kg:,.0f} kg - permitido até 100 kg)"
+                tipo_aloc += f" | Tolerância Operacional (+{excesso_kg:,.0f} kg)"
 
             novo_v = {
                 "rota_padrao": rota_nome,
@@ -692,7 +692,7 @@ def otimizar_veiculos_rota_pura(rota_nome: str, regiao: str, pool_lojas: list, b
     return veiculos_dedicados + melhor_veiculos, melhor_sobras
 
 def processar_alocacao_rotas(df_frios: pd.DataFrame, base_enderecos: dict):
-    print(f"\n[INFO] Executando roteirização estrita por ROTA PURA e DIAS CARREGAMENTO (Piso mínimo: {PESO_MINIMO_ROTA:,.0f} kg, Limite: 1 a {LIMITE_MAX_LOJAS_POR_ROTA} lojas)...")
+    print(f"\n[INFO] Executando roteirização por corredores e ciclos de carregamento...")
     
     lojas_processadas = []
     col_d = "DIAS_CARREGAMENTO" if "DIAS_CARREGAMENTO" in df_frios.columns else "Dias Carregamento"
@@ -1293,7 +1293,7 @@ def executar_roteirizacao(
     caminho_enderecos: str = ARQUIVO_ENDERECOS_PADRAO
 ):
     print("=" * 80)
-    print("INICIANDO PROCESSAMENTO DE ROTEIRIZAÇÃO - SETOR DE FRIOS (CALIBRADO)")
+    print("INICIANDO PROCESSAMENTO DE ROTEIRIZAÇÃO - SETOR DE FRIOS")
     print("=" * 80)
     
     if not os.path.exists(caminho_entrada):
@@ -1324,7 +1324,7 @@ def executar_roteirizacao(
         exportar_para_excel_formatado(df_resumo, df_detalhes, df_aguardando, df_sobras, caminho_saida, base_enderecos)
         
         print("\n" + "=" * 80)
-        print("RESUMO DA ROTEIRIZAÇÃO CONCLUÍDA (FAIXAS ESTRITAS DE PESO)")
+        print("RESUMO DA ROTEIRIZAÇÃO CONCLUÍDA")
         print("=" * 80)
         if not df_resumo.empty:
             cols_print = ["Região", "Rota de Execução", "Veículo Ideal", "Peso Total (Kg)", "1ª Entrega", "2ª Entrega", "3ª Entrega", "4ª Entrega"]

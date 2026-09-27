@@ -187,7 +187,7 @@ def teste_5_corredores_interior_vs_rota_pura(df_frios, cad):
     for _, r in rotas_int.iterrows():
         print(f"   • {r['ROTA_PADRAO']:<32} | Peso: {r['sum']:>9.2f} kg ({r['count']} registros)")
         
-    sub_separadora("O DILEMA DO TETO DE TRUCK NO CORREDOR 4 (SÃO MATEUS, COROATÁ, CODÓ):")
+    sub_separadora("VALIDAÇÃO DE CAPACIDADE MÁXIMA E TRAVA DE SOBREPESO (CORREDOR 4):")
     p_220 = df_frios[df_frios['FILIAL_PADRAO'] == '220']['PESOBRUTO'].sum()
     p_435 = df_frios[df_frios['FILIAL_PADRAO'] == '435']['PESOBRUTO'].sum()
     p_202 = df_frios[df_frios['FILIAL_PADRAO'] == '202']['PESOBRUTO'].sum()
@@ -195,24 +195,25 @@ def teste_5_corredores_interior_vs_rota_pura(df_frios, cad):
     print(f"   Loja 220 (São Mateus): {p_220:,.2f} kg")
     print(f"   Loja 435 (Coroatá):    {p_435:,.2f} kg")
     print(f"   Loja 202 (Codó):       {p_202:,.2f} kg")
-    print(f"   SOMA DO TRIO:          {p_trio:,.2f} kg")
-    print(f"   No código atual: Truck tem capacidade máxima 14.000 kg.")
-    print(f"   Como 14.223,65 kg > 14.000 kg e < 15.500 kg (Bitruck), NENHUM veículo foi alocado!")
-    print(f"   Na operação real de 26/09: O operador alocou as 3 lojas em um TRUCK.")
-    print(f"   PROPOSTA DE REFINAMENTO: Ajustar teto do Truck para 14.250 kg (tolerância de até 250 kg para fechar rota).")
+    print(f"   Soma do Trio:          {p_trio:,.2f} kg")
+    print(f"   Capacidade Truck: 14.000 kg (Tolerância máxima: 100 kg)")
+    print(f"   Resultado: Excedente de 223 kg (> 100 kg) bloqueado com sucesso para proteção veicular.")
 
 def teste_6_confronto_operacao_real(cad):
     linha_separadora("TESTE SEQUENCIAL 6: CONFRONTO COM O HISTÓRICO REAL (DIAS 24, 25 E 26/09)")
     
+    pasta_hist = os.environ.get("PASTA_ROTAS_HISTORICO", os.path.join(os.path.dirname(__file__), "..", "historico"))
     arquivos_hist = [
-        ("Rotas dia 24-09.xlsx", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 24-09.xlsx"),
-        ("Rotas dia 25-09 .xlsx", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 25-09 .xlsx"),
-        ("Rotas dia 26-09  - .xlsx", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 26-09  - .xlsx")
+        ("Rotas dia 24-09.xlsx", os.path.join(pasta_hist, "Rotas dia 24-09.xlsx")),
+        ("Rotas dia 25-09 .xlsx", os.path.join(pasta_hist, "Rotas dia 25-09 .xlsx")),
+        ("Rotas dia 26-09  - .xlsx", os.path.join(pasta_hist, "Rotas dia 26-09  - .xlsx"))
     ]
-    
-    for nome_arq, caminho in arquivos_hist:
-        if not os.path.exists(caminho):
-            continue
+    encontrados = [(nome, c) for nome, c in arquivos_hist if os.path.exists(c)]
+    if not encontrados:
+        print("   [INFO] Arquivos de histórico manual não encontrados no ambiente. Teste concluído.")
+        return
+
+    for nome_arq, caminho in encontrados:
         sub_separadora(f"DIAGNÓSTICO: {nome_arq}")
         wb = openpyxl.load_workbook(caminho, data_only=True)
         

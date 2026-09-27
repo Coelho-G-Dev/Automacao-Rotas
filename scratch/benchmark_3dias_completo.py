@@ -140,10 +140,11 @@ def executar_benchmark():
             "UF": str(r.get("UF", ""))
         }
         
+    pasta_rotas = os.environ.get("PASTA_ROTAS_HISTORICO", os.path.join(os.path.dirname(__file__), "..", "historico"))
     arquivos = [
-        ("24/09/2026", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 24-09.xlsx"),
-        ("25/09/2026", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 25-09 .xlsx"),
-        ("26/09/2026", r"C:\Users\gabri\Desktop\Trabalho\Rotas\Rotas dia 26-09  - .xlsx")
+        ("24/09/2026", os.path.join(pasta_rotas, "Rotas dia 24-09.xlsx")),
+        ("25/09/2026", os.path.join(pasta_rotas, "Rotas dia 25-09 .xlsx")),
+        ("26/09/2026", os.path.join(pasta_rotas, "Rotas dia 26-09  - .xlsx"))
     ]
     
     print("=" * 100)

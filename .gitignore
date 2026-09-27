@@ -53,3 +53,12 @@ npm-debug.log*
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# ==========================================
+# Scripts e Rascunhos Temporários
+# ==========================================
+scratch/*
+!scratch/benchmark_3dias_completo.py
+!scratch/executar_bateria_testes_rotas.py
+
+
